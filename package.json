@@ -1,0 +1,19 @@
+{
+  "name": "pdf-to-html",
+  "version": "1.0.0",
+  "description": "java -jar ./app.jar ./file.pdf .",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivanduka/pdf-to-html.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivanduka/pdf-to-html/issues"
+  },
+  "homepage": "https://github.com/ivanduka/pdf-to-html#readme"
+}
