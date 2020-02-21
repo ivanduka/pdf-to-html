@@ -8,48 +8,53 @@ const interval = setInterval(() => {
 
 const main = p1 => {
   const page1 = document.querySelector("#page1");
-  p1.style.opacity = "0.8";
-
-  new ResizeObserver(() => {
-    console.log("PAGE SIZE:", page1.offsetWidth, page1.offsetHeight);
-    canvasElement.setAttribute("width", parseInt(page1.style.width));
-    canvasElement.setAttribute("height", parseInt(page1.style.height));
-    console.log("CANVAS SIZE:", canvasElement.width, canvasElement.height);
-  }).observe(page1);
-
   const canvasElement = document.createElement("canvas");
-
   page1.appendChild(canvasElement);
-
   const ctx = canvasElement.getContext("2d");
 
-  let last_mousex = 0;
-  let last_mousey = 0;
-  let mousex = 0;
-  let mousey = 0;
-  let mousedown = false;
+  let lastMouseX = 0;
+  let lastMouseY = 0;
+  let newMouseX = 0;
+  let newMouseY = 0;
+  let mouseIsPressed = false;
+  let width = page1.style.width;
+  let height = page1.style.height;
+
+  p1.style.opacity = 0.8;
+
+  new ResizeObserver(() => {
+    width = page1.style.width;
+    height = page1.style.height;
+    canvasElement.setAttribute("width", width);
+    canvasElement.setAttribute("height", height);
+  }).observe(page1);
 
   page1.addEventListener("mousedown", e => {
     const rect = e.target.getBoundingClientRect();
-    last_mousex = e.clientX - rect.left; //x position within the element.
-    last_mousey = e.clientY - rect.top; //y position within the element.
-    mousedown = true;
+    lastMouseX = e.clientX - rect.left; //x position within the element.
+    lastMouseY = e.clientY - rect.top; //y position within the element.
+    mouseIsPressed = true;
   });
 
   page1.addEventListener("mouseup", e => {
-    mousedown = false;
+    mouseIsPressed = false;
+    console.log("======================");
+    console.log(`Page size: ${width} by ${height}`);
+    console.log(
+      `Rectangle: ${lastMouseX}x${lastMouseY} to ${newMouseX}x${newMouseY}`
+    );
   });
 
   page1.addEventListener("mousemove", e => {
     const rect = page1.getBoundingClientRect();
-    mousex = parseInt(e.clientX - rect.left); //x position within the element.
-    mousey = parseInt(e.clientY - rect.top); //y position within the element.
-    if (mousedown) {
+    newMouseX = parseInt(e.clientX - rect.left);
+    newMouseY = parseInt(e.clientY - rect.top);
+    if (mouseIsPressed) {
       ctx.clearRect(0, 0, canvasElement.width, canvasElement.height); //clear canvas
       ctx.beginPath();
-      var width = mousex - last_mousex;
-      var height = mousey - last_mousey;
-      ctx.rect(last_mousex, last_mousey, width, height);
+      var width = newMouseX - lastMouseX;
+      var height = newMouseY - lastMouseY;
+      ctx.rect(lastMouseX, lastMouseY, width, height);
       ctx.strokeStyle = "red";
       ctx.lineWidth = 1;
       ctx.stroke();
