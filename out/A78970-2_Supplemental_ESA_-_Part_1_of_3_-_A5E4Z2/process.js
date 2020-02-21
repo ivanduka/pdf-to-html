@@ -20,17 +20,15 @@ const mouseDown = e => {
   obj.y = y;
 };
 
-// setTimeout(() => console.clear(), 5000);
-
 const page1 = document.querySelector("#page1");
 
-page1.addEventListener("mousedown", mouseDown);
-page1.addEventListener("mouseup", mouseUp);
+// page1.addEventListener("mousedown", mouseDown);
+// page1.addEventListener("mouseup", mouseUp);
 
 const canvasElement = document.createElement("canvas");
 
 setTimeout(() => {
-  console.clear();
+  // console.clear();
   new ResizeObserver(() => {
     console.log("SIZE:", page1.offsetWidth, page1.offsetHeight);
     canvasElement.style.width = page1.style.width;
@@ -54,8 +52,9 @@ let mousedown = false;
 
 //Mousedown
 page1.addEventListener("mousedown", e => {
-  last_mousex = e.clientX - canvasx;
-  last_mousey = e.clientY - canvasy;
+  const rect = e.target.getBoundingClientRect();
+  last_mousex = e.clientX - rect.left; //x position within the element.
+  last_mousey = e.clientY - rect.top; //y position within the element.
   mousedown = true;
 });
 
@@ -64,10 +63,11 @@ page1.addEventListener("mouseup", e => {
   mousedown = false;
 });
 
-//Mousemove
+//Mousemove - CANVAS IS 0,0 bottom left
 page1.addEventListener("mousemove", e => {
-  mousex = parseInt(e.clientX - canvasx);
-  mousey = parseInt(e.clientY - canvasy);
+  const rect = e.target.getBoundingClientRect();
+  const mousex = e.clientX - rect.left; //x position within the element.
+  const mousey = e.clientY - rect.top; //y position within the element.
   if (mousedown) {
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height); //clear canvas
     ctx.beginPath();
@@ -75,20 +75,20 @@ page1.addEventListener("mousemove", e => {
     var height = mousey - last_mousey;
     ctx.rect(last_mousex, last_mousey, width, height);
     ctx.strokeStyle = "red";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 1;
     ctx.stroke();
   }
-  //Output
-  // console.log(
-  //   "current: " +
-  //     mousex +
-  //     ", " +
-  //     mousey +
-  //     "\t\t\tlast: " +
-  //     last_mousex +
-  //     ", " +
-  //     last_mousey +
-  //     "\t\t\tmousedown: " +
-  //     mousedown
-  // );
+
+  console.log(
+    "current: " +
+      mousex +
+      ", " +
+      mousey +
+      "\t\t\tlast: " +
+      last_mousex +
+      ", " +
+      last_mousey +
+      "\t\t\tmousedown: " +
+      mousedown
+  );
 });
