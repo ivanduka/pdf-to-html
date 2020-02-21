@@ -20,19 +20,19 @@ const main = p1 => {
   let canvasLeftOffset = rect.left;
   let canvasTopOffset = rect.top;
   let mouseIsPressed = false;
-  let width = page1.style.width;
-  let height = page1.style.height;
+  let pageWidth = parseInt(page1.style.width);
+  let pageHeight = parseInt(page1.style.height);
 
   p1.style.opacity = 0.8;
 
   new ResizeObserver(() => {
-    width = page1.style.width;
-    height = page1.style.height;
+    pageWidth = parseInt(page1.style.width);
+    pageHeight = parseInt(page1.style.height);
     canvasLeftOffset = rect.left;
     canvasTopOffset = rect.top;
     rect = page1.getBoundingClientRect();
-    canvasElement.setAttribute("width", width);
-    canvasElement.setAttribute("height", height);
+    canvasElement.setAttribute("width", pageWidth);
+    canvasElement.setAttribute("height", pageHeight);
   }).observe(page1);
 
   page1.addEventListener("mousedown", e => {
@@ -44,11 +44,17 @@ const main = p1 => {
 
   page1.addEventListener("mouseup", e => {
     mouseIsPressed = false;
+    x1 = parseInt((lastMouseX / pageWidth) * 100);
+    y1 = parseInt((lastMouseY / pageHeight) * 100);
+    x2 = parseInt((newMouseX / pageWidth) * 100);
+    y2 = parseInt((newMouseY / pageHeight) * 100);
+
     console.log("======================");
-    console.log(`Page size: ${width} by ${height}`);
+    console.log(`Page size: ${pageWidth} by ${pageHeight}`);
     console.log(
       `Rectangle: ${lastMouseX}x${lastMouseY} to ${newMouseX}x${newMouseY}`
     );
+    console.log(`In percentage: ${x1}%-${x2}% x ${y1}%-${y2}%`);
   });
 
   page1.addEventListener("mousemove", e => {
