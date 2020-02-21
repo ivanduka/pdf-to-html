@@ -1,26 +1,27 @@
-const obj = {};
+// const obj = {};
 
-const mouseUp = e => {
-  const rect = e.target.getBoundingClientRect();
-  const x = e.clientX - rect.left; //x position within the element.
-  const y = e.clientY - rect.top; //y position within the element.
-  console.log(
-    `${Number.parseInt(obj.x, 10)}-${Number.parseInt(
-      obj.y,
-      10
-    )} => ${Number.parseInt(x, 10)}-${Number.parseInt(y, 10)}`
-  );
-};
+// const mouseUp = e => {
+//   const rect = e.target.getBoundingClientRect();
+//   const x = e.clientX - rect.left; //x position within the element.
+//   const y = e.clientY - rect.top; //y position within the element.
+//   console.log(
+//     `${Number.parseInt(obj.x, 10)}-${Number.parseInt(
+//       obj.y,
+//       10
+//     )} => ${Number.parseInt(x, 10)}-${Number.parseInt(y, 10)}`
+//   );
+// };
 
-const mouseDown = e => {
-  const rect = e.target.getBoundingClientRect();
-  const x = e.clientX - rect.left; //x position within the element.
-  const y = e.clientY - rect.top; //y position within the element.
-  obj.x = x;
-  obj.y = y;
-};
+// const mouseDown = e => {
+//   const rect = e.target.getBoundingClientRect();
+//   const x = e.clientX - rect.left; //x position within the element.
+//   const y = e.clientY - rect.top; //y position within the element.
+//   obj.x = x;
+//   obj.y = y;
+// };
 
 const page1 = document.querySelector("#page1");
+let p1;
 
 // page1.addEventListener("mousedown", mouseDown);
 // page1.addEventListener("mouseup", mouseUp);
@@ -29,10 +30,14 @@ const canvasElement = document.createElement("canvas");
 
 setTimeout(() => {
   // console.clear();
+  p1 = document.querySelector("#p1");
+  p1.style.opacity = "0.8";
+
   new ResizeObserver(() => {
     console.log("SIZE:", page1.offsetWidth, page1.offsetHeight);
-    canvasElement.style.width = page1.style.width;
-    canvasElement.style.height = page1.style.height;
+    canvasElement.setAttribute("width", parseInt(page1.style.width));
+    canvasElement.setAttribute("height", parseInt(page1.style.height));
+    console.log(canvasElement.width, canvasElement.height);
   }).observe(page1);
 }, 5000);
 
@@ -65,9 +70,10 @@ page1.addEventListener("mouseup", e => {
 
 //Mousemove - CANVAS IS 0,0 bottom left
 page1.addEventListener("mousemove", e => {
-  const rect = e.target.getBoundingClientRect();
-  const mousex = e.clientX - rect.left; //x position within the element.
-  const mousey = e.clientY - rect.top; //y position within the element.
+  const rect = page1.getBoundingClientRect();
+  const mousex = parseInt(e.clientX - rect.left); //x position within the element.
+  const mousey = parseInt(e.clientY - rect.top); //y position within the element.
+  console.log(canvasElement.width, canvasElement.height);
   if (mousedown) {
     ctx.clearRect(0, 0, canvasElement.width, canvasElement.height); //clear canvas
     ctx.beginPath();
