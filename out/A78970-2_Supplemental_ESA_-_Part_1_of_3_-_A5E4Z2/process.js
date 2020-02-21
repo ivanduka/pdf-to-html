@@ -12,10 +12,13 @@ const main = p1 => {
   page1.appendChild(canvasElement);
   const ctx = canvasElement.getContext("2d");
 
+  let rect = page1.getBoundingClientRect();
   let lastMouseX = 0;
   let lastMouseY = 0;
   let newMouseX = 0;
   let newMouseY = 0;
+  let canvasLeftOffset = rect.left;
+  let canvasTopOffset = rect.top;
   let mouseIsPressed = false;
   let width = page1.style.width;
   let height = page1.style.height;
@@ -25,6 +28,9 @@ const main = p1 => {
   new ResizeObserver(() => {
     width = page1.style.width;
     height = page1.style.height;
+    canvasLeftOffset = rect.left;
+    canvasTopOffset = rect.top;
+    rect = page1.getBoundingClientRect();
     canvasElement.setAttribute("width", width);
     canvasElement.setAttribute("height", height);
   }).observe(page1);
@@ -46,9 +52,8 @@ const main = p1 => {
   });
 
   page1.addEventListener("mousemove", e => {
-    const rect = page1.getBoundingClientRect();
-    newMouseX = parseInt(e.clientX - rect.left);
-    newMouseY = parseInt(e.clientY - rect.top);
+    newMouseX = parseInt(e.clientX - canvasLeftOffset);
+    newMouseY = parseInt(e.clientY - canvasTopOffset);
     if (mouseIsPressed) {
       ctx.clearRect(0, 0, canvasElement.width, canvasElement.height); //clear canvas
       ctx.beginPath();
