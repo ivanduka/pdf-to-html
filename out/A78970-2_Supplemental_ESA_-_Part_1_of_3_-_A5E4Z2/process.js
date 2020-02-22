@@ -1,13 +1,31 @@
-const interval = setInterval(() => {
-  p1 = document.querySelector("#p1");
-  if (p1) {
-    main(p1);
-    clearInterval(interval);
-  }
-}, 500);
+const observer = new MutationObserver(mutationList => {
+  mutationList.forEach(mutation => {
+    if (
+      mutation.type === "childList" &&
+      Array.from(mutation.addedNodes).filter(node => node.id === "p1")
+        .length === 1
+    ) {
+      observer.disconnect();
+      const p1 = document.querySelector("#p1");
+      main(p1);
+    }
+  });
+});
+
+const config = {
+  attributes: false,
+  characterData: false,
+  childList: true,
+  subtree: false
+};
+
+const page1 = document.querySelector("#page1");
+
+observer.observe(page1, config);
+
+// const pages = IDRViewer.config.pagecount;
 
 const main = p1 => {
-  const page1 = document.querySelector("#page1");
   const canvasElement = document.createElement("canvas");
   page1.appendChild(canvasElement);
   const ctx = canvasElement.getContext("2d");
@@ -24,7 +42,7 @@ const main = p1 => {
   let pageHeight = parseInt(page1.style.height);
 
   p1.style.opacity = 0.8;
-  p1.style.cursor = "cross";
+  p1.style.cursor = "crosshair";
 
   new ResizeObserver(() => {
     pageWidth = parseInt(page1.style.width);
