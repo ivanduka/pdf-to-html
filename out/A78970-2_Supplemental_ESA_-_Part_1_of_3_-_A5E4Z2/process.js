@@ -1,22 +1,24 @@
-const page1 = document.querySelector("#page1");
+const totalPagesInPDF = IDRViewer.config.pagecount;
 
-const observer = new MutationObserver((mutationList, observerObject) => {
-  mutationList.forEach(mutation => {
-    if (
-      mutation.type === "childList" &&
-      Array.from(mutation.addedNodes).filter(node => node.id === "p1")
-        .length === 1
-    ) {
-      observerObject.disconnect();
-      const p1 = document.querySelector("#p1");
-      main(p1, page1);
-    }
+for (let i = 1; i <= totalPagesInPDF; i++) {
+  const pageX = document.querySelector("#page" + i);
+
+  const observer = new MutationObserver((mutationList, observerObject) => {
+    mutationList.forEach(mutation => {
+      if (
+        mutation.type === "childList" &&
+        Array.from(mutation.addedNodes).filter(node => node.id === "p1")
+          .length === 1
+      ) {
+        observerObject.disconnect();
+        const pX = document.querySelector("#p" + i);
+        main(pX, pageX);
+      }
+    });
   });
-});
 
-observer.observe(page1, { childList: true });
-
-// const pages = IDRViewer.config.pagecount;
+  observer.observe(pageX, { childList: true });
+}
 
 const main = (pX, pageX) => {
   const canvasElement = document.createElement("canvas");
