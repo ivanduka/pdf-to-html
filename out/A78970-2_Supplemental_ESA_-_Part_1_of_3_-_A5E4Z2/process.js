@@ -1,11 +1,11 @@
-const observer = new MutationObserver(mutationList => {
+const observer = new MutationObserver(mutationList, observerObject => {
   mutationList.forEach(mutation => {
     if (
       mutation.type === "childList" &&
       Array.from(mutation.addedNodes).filter(node => node.id === "p1")
         .length === 1
     ) {
-      observer.disconnect();
+      observerObject.disconnect();
       const p1 = document.querySelector("#p1");
       main(p1);
     }
