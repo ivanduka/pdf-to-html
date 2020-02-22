@@ -1,4 +1,6 @@
-const observer = new MutationObserver(mutationList, observerObject => {
+const page1 = document.querySelector("#page1");
+
+const observer = new MutationObserver((mutationList, observerObject) => {
   mutationList.forEach(mutation => {
     if (
       mutation.type === "childList" &&
@@ -7,30 +9,21 @@ const observer = new MutationObserver(mutationList, observerObject => {
     ) {
       observerObject.disconnect();
       const p1 = document.querySelector("#p1");
-      main(p1);
+      main(p1, page1);
     }
   });
 });
 
-const config = {
-  attributes: false,
-  characterData: false,
-  childList: true,
-  subtree: false
-};
-
-const page1 = document.querySelector("#page1");
-
-observer.observe(page1, config);
+observer.observe(page1, { childList: true });
 
 // const pages = IDRViewer.config.pagecount;
 
-const main = p1 => {
+const main = (pX, pageX) => {
   const canvasElement = document.createElement("canvas");
-  page1.appendChild(canvasElement);
+  pageX.appendChild(canvasElement);
   const ctx = canvasElement.getContext("2d");
 
-  let rect = page1.getBoundingClientRect();
+  let rect = pageX.getBoundingClientRect();
   let lastMouseX = 0;
   let lastMouseY = 0;
   let newMouseX = 0;
@@ -38,30 +31,30 @@ const main = p1 => {
   let canvasLeftOffset = rect.left;
   let canvasTopOffset = rect.top;
   let mouseIsPressed = false;
-  let pageWidth = parseInt(page1.style.width);
-  let pageHeight = parseInt(page1.style.height);
+  let pageWidth = parseInt(pageX.style.width);
+  let pageHeight = parseInt(pageX.style.height);
 
-  p1.style.opacity = 0.8;
-  p1.style.cursor = "crosshair";
+  pX.style.opacity = 0.8;
+  pX.style.cursor = "crosshair";
 
   new ResizeObserver(() => {
-    pageWidth = parseInt(page1.style.width);
-    pageHeight = parseInt(page1.style.height);
-    rect = page1.getBoundingClientRect();
+    pageWidth = parseInt(pageX.style.width);
+    pageHeight = parseInt(pageX.style.height);
+    rect = pageX.getBoundingClientRect();
     canvasLeftOffset = rect.left;
     canvasTopOffset = rect.top;
     canvasElement.setAttribute("width", pageWidth);
     canvasElement.setAttribute("height", pageHeight);
-  }).observe(page1);
+  }).observe(pageX);
 
-  page1.addEventListener("mousedown", e => {
+  pageX.addEventListener("mousedown", e => {
     const rect = e.target.getBoundingClientRect();
     lastMouseX = e.clientX - rect.left; //x position within the element.
     lastMouseY = e.clientY - rect.top; //y position within the element.
     mouseIsPressed = true;
   });
 
-  page1.addEventListener("mouseup", e => {
+  pageX.addEventListener("mouseup", e => {
     mouseIsPressed = false;
     x1 = parseInt((lastMouseX / pageWidth) * 100);
     y1 = parseInt((lastMouseY / pageHeight) * 100);
@@ -76,7 +69,7 @@ const main = p1 => {
     console.log(`In percentage: ${x1}%-${x2}% x ${y1}%-${y2}%`);
   });
 
-  page1.addEventListener("mousemove", e => {
+  pageX.addEventListener("mousemove", e => {
     newMouseX = parseInt(e.clientX - canvasLeftOffset);
     newMouseY = parseInt(e.clientY - canvasTopOffset);
     if (mouseIsPressed) {
