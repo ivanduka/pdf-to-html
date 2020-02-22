@@ -24,13 +24,14 @@ const main = p1 => {
   let pageHeight = parseInt(page1.style.height);
 
   p1.style.opacity = 0.8;
+  p1.style.cursor = "cross";
 
   new ResizeObserver(() => {
     pageWidth = parseInt(page1.style.width);
     pageHeight = parseInt(page1.style.height);
+    rect = page1.getBoundingClientRect();
     canvasLeftOffset = rect.left;
     canvasTopOffset = rect.top;
-    rect = page1.getBoundingClientRect();
     canvasElement.setAttribute("width", pageWidth);
     canvasElement.setAttribute("height", pageHeight);
   }).observe(page1);
