@@ -1,3 +1,5 @@
+const idrviewer = document.querySelector("#idrviewer");
+
 const totalPagesInPDF = IDRViewer.config.pagecount;
 
 for (let i = 1; i <= totalPagesInPDF; i++) {
@@ -7,7 +9,7 @@ for (let i = 1; i <= totalPagesInPDF; i++) {
     mutationList.forEach(mutation => {
       if (
         mutation.type === "childList" &&
-        Array.from(mutation.addedNodes).filter(node => node.id === "p1")
+        Array.from(mutation.addedNodes).filter(node => node.id === "p" + i)
           .length === 1
       ) {
         observerObject.disconnect();
@@ -50,7 +52,7 @@ const main = (pX, pageX) => {
   }).observe(pageX);
 
   pageX.addEventListener("mousedown", e => {
-    const rect = e.target.getBoundingClientRect();
+    const rect = canvasElement.getBoundingClientRect();
     lastMouseX = e.clientX - rect.left; //x position within the element.
     lastMouseY = e.clientY - rect.top; //y position within the element.
     mouseIsPressed = true;
